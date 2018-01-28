@@ -25,7 +25,7 @@ void StringChecks::Play()
 
 void StringChecks::Permute(char a[], int i, int n, set<string>& oPermutations)
 {
-	int j, temp;
+	int j;
 	if (i == n) oPermutations.insert(string(a));
 	else
 	{

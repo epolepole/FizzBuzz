@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\stringchecks">
-      <UniqueIdentifier>{b4e533db-0b63-4245-bb21-a507955f4b1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\marslanding">
-      <UniqueIdentifier>{beb70293-9247-4f7b-8b45-918e2160402d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -27,21 +21,12 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MarsLander_2.h">
-      <Filter>Header Files\marslanding</Filter>
-    </ClInclude>
-    <ClInclude Include="StringChecks.h">
-      <Filter>Header Files\stringchecks</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StringChecks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FizzBuzz.cpp">
+    <ClCompile Include="MarsLanding2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
