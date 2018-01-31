@@ -19,6 +19,9 @@
     <Filter Include="Header Files\marslanding">
       <UniqueIdentifier>{beb70293-9247-4f7b-8b45-918e2160402d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\racing">
+      <UniqueIdentifier>{f7050b7b-5cc0-4495-99e7-7bb385de12ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -32,6 +35,9 @@
     </ClInclude>
     <ClInclude Include="StringChecks.h">
       <Filter>Header Files\stringchecks</Filter>
+    </ClInclude>
+    <ClInclude Include="Race.h">
+      <Filter>Header Files\racing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

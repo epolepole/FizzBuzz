@@ -15,11 +15,11 @@ namespace stringchecks {
 			string a = "agua";
 			string b = "oooaguaooo";
 			string c = "oooaguooo";
-			string d = "oooAaguooo";
+			string _d = "oooAaguooo";
 			//cout << AInB(a, b) << endl;
 			//cout << AInB(a, c) << endl;
 
-			cout << AInBDisordered(a, d) << endl;
+			cout << AInBDisordered(a, _d) << endl;
 		}
 	}
 
