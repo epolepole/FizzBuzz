@@ -23,6 +23,17 @@ template <typename T> int sgn(T val) {
 }
 
 namespace trigonometry {
+
+	struct CurveFit {
+		double _a, _b, _c, _d;
+		CurveFit(const double& a,const double& b,const double& c, const double& d) :_a(a), _b(b), _c(c), _d(d) {};
+		
+		double y(const double &x) const
+		{
+			return _d + (_a - _d) / (1. + pow(x / _c, _b));
+		}
+	};
+
 	struct Pair {
 		double x = 0;
 		double y = 0;
@@ -37,7 +48,7 @@ namespace trigonometry {
 			return os;
 		}
 		virtual ~Pair() {}
-		virtual bool operator==(const Pair& b) const { return x == b.x and y == b.y; }
+		virtual bool operator==(const Pair& b) const { return x == b.x && y == b.y; }
 		virtual bool operator<(const Pair& b) const 
 		{ 
 			if (x < b.x) return true;
@@ -82,8 +93,8 @@ namespace trigonometry {
 		Circle(const double & ir, const Point& iPoint) : _r(ir), _c(iPoint) {};
 		Circle(const Point& iP1, const Point& iP2, const Point& iP3)
 		{
-			cerr << "creating circle with " << endl;
-			cerr << "\tP1: " << iP1 << " P2: " << iP2 << " P3: " << iP3 << endl;
+			//cerr << "creating circle with " << endl;
+			//cerr << "\tP1: " << iP1 << " P2: " << iP2 << " P3: " << iP3 << endl;
 			double ma = (iP2.y - iP1.y) / (iP2.x - iP1.x);
 			double mb = (iP3.y - iP2.y) / (iP3.x - iP2.x);
 			//cerr << "ma = " << ma << endl;
@@ -93,7 +104,7 @@ namespace trigonometry {
 			_c.y = -1. / ma * (_c.x - (iP1.x + iP2.x) / 2.) + (iP1.y + iP2.y) / 2.;
 			//cerr << "_c.y = " << _c.y << endl;
 			_r = Distance(_c, iP1);
-			cerr << "created circle with center: " << _c << " and radius: " << _r << endl;
+			//cerr << "created circle with center: " << _c << " and radius: " << _r << endl;
 		}
 		bool contains(const Point& iP)
 		{
@@ -117,24 +128,26 @@ namespace trigonometry {
 		PCircle(const Point& iP1, const Point& iP2, const Point& iP3) :Circle(iP1, iP2, iP3) {};
 		void setParams(const Point& iP1, const Point& iP2, const int iDirection)
 		{
-			if (not contains(iP1)){cerr << "Point 1: " << iP1 << " not in circunference" << endl;}
-			if (not contains(iP2)){cerr << "Point 2: " << iP2 << " not in circunference" << endl;}
-			double aAng1 = atan2(iP1.y - _c.y, iP1.x - _c.x);
-			double aAng2 = atan2(iP2.y - _c.y, iP2.x - _c.x);
+			if (!contains(iP1)){cerr << "Point 1: " << iP1 << " not in circunference" << endl;}
+			if (!contains(iP2)){cerr << "Point 2: " << iP2 << " not in circunference" << endl;}
+			double aAng1 = Atan(iP1 - _c);
+			double aAng2 = Atan(iP2 - _c);
+			//cerr << "aAng1 = " << aAng1 << "rad = " << aAng1 * 180 / M_PI << "deg" << endl;
+			//cerr << "aAng2 = " << aAng2 << "rad = " << aAng2 * 180 / M_PI << "deg" << endl;
 			if (aAng1 < 0) aAng1 += 2 * M_PI;
 			if (aAng2 < 0) aAng2 += 2 * M_PI;
-			if (iDirection >= 0 and aAng2<aAng1) aAng2 += 2 * M_PI;
-			else if (iDirection < 0 and aAng2>aAng1) aAng2 -= 2*M_PI;
-			cerr << "aAng1 = " << aAng1 << endl;
-			cerr << "aAng2 = " << aAng2 << endl;
+			if (iDirection >= 0 && aAng2<aAng1) aAng2 += 2 * M_PI;
+			else if (iDirection < 0 && aAng2>aAng1) aAng2 -= 2*M_PI;
+			cerr << "aAng1 = " << aAng1 << "rad = " << aAng1 * 180 / M_PI << "deg" << endl;
+			cerr << "aAng2 = " << aAng2 << "rad = " << aAng2 * 180 / M_PI << "deg" << endl;
 
 			_a = aAng1;
 			_b = aAng2 - aAng1;
 
-			cerr << "_a = " << _a << endl;
-			cerr << "_b = " << _b << endl;
+			//cerr << "_a = " << _a << endl;
+			//cerr << "_b = " << _b << endl;
 			_circ = abs(aAng2 - aAng1) * _r;
-			cerr << "_circ = " << _circ << endl;
+			//cerr << "_circ = " << _circ << endl;
 		}
 		double angFromT(const double t) { return _a + _b * t; }
 		Point pFromT(const double t) { return pFromAng(angFromT(t)); }
@@ -157,19 +170,33 @@ namespace racing {
 	static int max_trhust = 100;
 
 	//Distance constants
-	static int min_dist_max_speed = 500;
-	static double max_speed_reduction = 1;
+	static int min_dist_max_speed = 5000;
+	static double max_speed_reduction = 0.5;
 	static double dist_const = -1 * max_speed_reduction / min_dist_max_speed;
 
 	//Angle constants
-	static double max_thrust_reduction = 1;
-	static double ang_const_b_percent = 1;
-	static double ang_const_b = ang_const_b_percent * max_thrust_reduction / 180;
-	static double ang_const_a = (max_thrust_reduction / 180 - ang_const_b) / 180;
-	static double ang_const_cubic = 8 * 90 / pow(max_thrust_reduction, 3);
+	static const double ang_const_a = 2.103186e-17;
+	static const double ang_const_b = 19.69333;
+	static const double ang_const_c = 89.44275;
+	static const double ang_const_d = 1.000001;
+	static const CurveFit ang_red(ang_const_a, ang_const_b, ang_const_c, ang_const_d);
+
+	static const double dist_const_a = 0.1527513;
+	static const double dist_const_b = 0.4343583;
+	static const double dist_const_c = 253942899999.99997;
+	static const double dist_const_d = 1332764;
+	//y = 715.8107 + (-4.682333e-14 - 715.8107)/(1 + (x/2327.689)^2.151523)
+	//y = 1332764 + (0.1527513 - 1332764)/(1 + (x/253942899999.99997)^0.4343583)
+	static const CurveFit dist_red(dist_const_a, dist_const_b, dist_const_c, dist_const_d);
+	//static double max_thrust_reduction = 1;
+	//static double ang_const_b_percent = 1;
+	//static double ang_const_b = ang_const_b_percent * max_thrust_reduction / 180;
+	//static double ang_const_a = (max_thrust_reduction / 180 - ang_const_b) / 180;
+	//static double ang_const_cubic = 8 * 90 / pow(max_thrust_reduction, 3);
 
 	struct Car {
 		Point _p = Point(-1, -1);
+		Point _p_prev = Point(-1, -1);
 		int _thrust = 0;
 		double _v = 0;
 		double _v_prev = 0;
@@ -177,9 +204,14 @@ namespace racing {
 		double _ang = 0;
 		double _d = 0;
 		Car() {};
+		void setNewPos(const Point& iP)
+		{
+			_v = Distance(iP, _p_prev);
+			_p_prev = _p;
+			_p = iP;
+		}
 	};
-
-
+	
 	struct Checkpoint {
 		Point _p = Point(0,0);
 		double _ang = 0;
@@ -269,24 +301,22 @@ namespace racing {
 			return os;
 		}
 	};
+	
+	static double getAngReduction(const Checkpoint& iCheck)
+	{
+		return ang_red.y(iCheck._ang);
+	}
+
 	void Play()
 	{
 		cerr << "Playing race" << endl;
-		PCircle aPCircle(Point(0, 1), Point(1, 0), Point(2, 1));
-		aPCircle.setParams(Point(1,0),Point(2,1),-1);
-		cerr << aPCircle.pFromT(2) << endl;
+		PCircle aPCircle(Point(6,2), Point(5,-1), Point(4,-2));
+		aPCircle.setParams(Point(5,-1),Point(4,-2),-1);
 
+		/*cerr << aPCircle.pFromT(2) << endl;
 		PCircle aPCircle2(Point(10, 7), Point(4, 1), Point(12, 5));
 		aPCircle2.setParams(Point(4, 1), Point(10, 7), -1);
-		cerr << aPCircle2.pFromT(0) << endl;
-		cerr << aPCircle2.pFromT(0.5) << endl;
-		cerr << aPCircle2.pFromT(1) << endl;
-		cerr << aPCircle2.pFromT(2) << endl;
-		PCircle aIntPCircle = aPCircle2.internal(0.5*aPCircle2._r);
-		cerr << aIntPCircle.pFromT(0) << endl;
-		cerr << aIntPCircle.pFromT(0.5) << endl;
-		cerr << aIntPCircle.pFromT(1) << endl;
-		cerr << aIntPCircle.pFromT(2) << endl;
+		PCircle aIntPCircle = aPCircle2.internal(0.5*aPCircle2._r);*/
 		/*Checkpoint c1(0, 0);
 		Checkpoint c2(100, 0);
 		Checkpoint c3(100, 100);
@@ -323,7 +353,7 @@ namespace racing {
 using namespace racing;
 using namespace trigonometry;
 
-int main()
+void play_race()
 {
 	Car aMainCar;
 	Car aBossCar;
@@ -334,61 +364,121 @@ int main()
 	// game loop
 	while (1) {
 
-		int nextCheckpointX; // x position of the next check point
-		int nextCheckpointY; // y position of the next check point
+		//int nextCheckpointX; // x position of the next check point
+		//int nextCheckpointY; // y position of the next check point
 		int nextCheckpointDist; // distance to the next checkpoint
-		int nextCheckpointAngle; // angle between your pod orientation and the direction of the next checkpoint
+								//int nextCheckpointAngle; // angle between your pod orientation and the direction of the next checkpoint
 		Checkpoint aCheck;
-
-		cin >> aMainCar._p.x >> aMainCar._p.y >> aCheck._p.x >> aCheck._p.y >> nextCheckpointDist >> aCheck._ang; cin.ignore();
+		Point aCarP;
+		cin >> aCarP.x >> aCarP.y >> aCheck._p.x >> aCheck._p.y >> nextCheckpointDist >> aCheck._ang; cin.ignore();
 		cin >> aBossCar._p.x >> aBossCar._p.y; cin.ignore();
+		aMainCar.setNewPos(aCarP);
+		cerr << "speed: " << aMainCar._v;
+
+
 		aCheck.recalculateInfo(aMainCar);
+		aMap.addPoint(aCheck);
 		//If different x and y than prev checkpoint we have a newone
 		//cerr << "Car: X= " << aMainCar._p.x << " Y= " << aMainCar._p.y << endl;
 		//cerr << "Input: Dist= " << nextCheckpointDist << " Angle= " << aCheck._ang << endl;
 		//cerr << "Calc: Dist= " << aCheck._d << " Angle= " << aCheck._ang << endl;
-		aMap.addPoint(aCheck);
 		// Write an action using cout. DON'T FORGET THE "<< endl"
 		// To debug: cerr << "Debug messages..." << endl;
 
 
 		// You have to output the target position
 		// followed by the power (0 <= thrust <= 100)
-		// i.e.: "x y thrust"
-
-
-		//Angle deviation reduction
-		// double ang_red = abs(aCheck.ang) * (ang_const_a * abs(aCheck.ang) + ang_const_b);
-		// double ang_red =cbrt((abs(aCheck.ang) - 90)/ang_const_cubic ) + max_thrust_reduction/2.;
-		double ang_red = 0;
-		if (abs(aCheck._ang) > 80)  ang_red = 1;
-		//Distance speed reduction
-		double dist_red = 0;
-		if (aCheck._d < min_dist_max_speed)
-			dist_red = max_speed_reduction + dist_const * aCheck._d;
-
-		//cerr << "dist_red =  max_spd_red + dist_const * aCheck.d" << endl;
-		//cerr << dist_red << "=" << max_speed_reduction << "+ " << dist_const << "*" << aCheck._d << endl;
+		// i.e.: "x y thrust"		
 
 		//cerr << "ang red: " << ang_red << " dist red: " << dist_red << endl;
-		int thrust = max_trhust * (1 - ang_red) * (1 - dist_red);
-		//cerr << "thrust: " << thrust << endl;
+		int thrust = (int)floor(max_trhust * (1 - ang_red.y(aCheck._ang)) * (1 - dist_red.y(aCheck._d)));
+		cerr << "thrust: " << thrust << endl;
 
 		Point aNextP = aCheck._p;
 		if (aMap.complete())
 		{
-			int dir = sgn(Atan(aMap.getCurrentCheck()._p - aMainCar._p) - Atan(aMap.getNext()._p - aMap.getCurrentCheck()._p));
+			int dir = Atan(aMap.getCurrentCheck()._p - aMainCar._p) - Atan(aMap.getNext()._p - aMap.getCurrentCheck()._p);
 			PCircle aPCircle(aMainCar._p, aMap.getCurrentCheck()._p, aMap.getNext()._p);
-			aPCircle.setParams(aMap.getCurrentCheck()._p, aMainCar._p, dir);
-			PCircle aInteriorPCircle = aPCircle.internal(aPCircle._r - 800);
-			aNextP = aInteriorPCircle.pFromCirc(nextCheckpointDist*0.3);
+			cerr << "direction: " << dir << endl;
+			aPCircle.setParams(aMap.getCurrentCheck()._p, aMainCar._p, sgn(dir));
+			PCircle aInteriorPCircle = aPCircle.internal(aPCircle._r - ((600 + aMainCar._v) * exp(-1 * nextCheckpointDist)));
+			aNextP = aInteriorPCircle.pFromCirc(nextCheckpointDist*0.4);
 		}
 
-		if (aCheck._ang < 10 and thrust == 100 && aCheck._d > 10000 and not boostUsed)
+		if (aCheck._ang < 10 && thrust == 100 && aCheck._d > 10000 && !boostUsed)
 		{
-			cout << aNextP.x << " " << aNextP.y << " " << "BOOST" << endl;
+			cout << (int)aNextP.x << " " << (int)aNextP.y << " " << "BOOST" << endl;
 			boostUsed = true;
 		}
 		else cout << (int)aNextP.x << " " << (int)aNextP.y << " " << (int)thrust << endl;
 	}
+}
+
+void debug_race()
+{
+	Car aMainCar;
+	Car aBossCar;
+	Map aMap;
+	std::set<Checkpoint> aCheckpointsSet;
+	std::vector<Checkpoint> aCheckpointsVector;
+	bool boostUsed = false;
+	// game loop
+	//Go to start
+	while (1) {
+		Point destination(1000,1000);
+		int nextCheckpointDist; 
+		Checkpoint aCheck;
+		Point aCarP;
+		cin >> aCarP.x >> aCarP.y >> aCheck._p.x >> aCheck._p.y >> nextCheckpointDist >> aCheck._ang; cin.ignore();
+		cin >> aBossCar._p.x >> aBossCar._p.y; cin.ignore();
+		aMainCar.setNewPos(aCarP);
+		double dist = Distance(destination, aMainCar._p);
+		cerr << "Current speed = " << aMainCar._v << endl;
+		cerr << "Desired speed = " << dist_red.y(dist) << endl;
+		double thrust = (dist_red.y(dist) - aMainCar._v) * 1;
+		if (thrust < 0) thrust = 0;
+		if (thrust > 100) thrust = 100;
+		cout << (int)destination.x << " " << (int)destination.y << " " << (int)thrust << endl;
+		if (Distance(aMainCar._p, destination) < 200) break;
+	}
+	//Turn
+	int count = 0;
+	while (1)
+	{
+		Point destination(15000, 1000);
+		int nextCheckpointDist; 
+		Checkpoint aCheck;
+		Point aCarP;
+		cin >> aCarP.x >> aCarP.y >> aCheck._p.x >> aCheck._p.y >> nextCheckpointDist >> aCheck._ang; cin.ignore();
+		cin >> aBossCar._p.x >> aBossCar._p.y; cin.ignore();
+		aMainCar.setNewPos(aCarP);
+		cerr << "speed: " << aMainCar._v;
+		aCheck.recalculateInfo(aMainCar);
+		aMap.addPoint(aCheck);
+		cout << (int)destination.x << " " << (int)destination.y << " " << 0 << endl;
+		if (abs(aMainCar._ang) < 5) ++count;
+		if (count >= 10) break;
+	}
+	cerr << "Jumping to light" << endl;
+	while (1)
+	{
+		Point destination(15000, 1000);
+		int nextCheckpointDist;
+		Checkpoint aCheck;
+		Point aCarP;
+		cin >> aCarP.x >> aCarP.y >> aCheck._p.x >> aCheck._p.y >> nextCheckpointDist >> aCheck._ang; cin.ignore();
+		cin >> aBossCar._p.x >> aBossCar._p.y; cin.ignore();
+		aMainCar.setNewPos(aCarP);
+		cerr << "speed: " << aMainCar._v;
+		aCheck.recalculateInfo(aMainCar);
+		aMap.addPoint(aCheck);
+		cout << (int)destination.x << " " << (int)destination.y << " " << 100 << endl;
+	}
+}
+
+int main()
+{
+	debug_race();
+	
+	
 }
