@@ -42,8 +42,6 @@ def fast_solution(i_list_of_people):
                 count += 1
             elif a_year == a_person[1]:
                 count -= 1
-            else:
-                continue
         if max_count < count:
                 max_count = count
                 max_year = a_year
@@ -64,9 +62,9 @@ def optimal_solution(i_sorted_birth_deaths):
         if max_count < count:
                 max_count = count
                 max_year = date[0]
-        if birth_count == number_of_persons:
-            print("stopping at year " + str(date[0]) + " for iteration " + str(iterations))
-            break
+        # if birth_count == number_of_persons:
+        #     print("stopping at year " + str(date[0]) + " for iteration " + str(iterations))
+        #     break
         iterations += 1
     print("max_year: " + str(max_year))
     return max_year
