@@ -117,8 +117,8 @@ namespace trigonometry {
 		PCircle(const Point& iP1, const Point& iP2, const Point& iP3) :Circle(iP1, iP2, iP3) {};
 		void setParams(const Point& iP1, const Point& iP2, const int iDirection)
 		{
-			if (not contains(iP1)){cerr << "Point 1: " << iP1 << " not in circunference" << endl;}
-			if (not contains(iP2)){cerr << "Point 2: " << iP2 << " not in circunference" << endl;}
+			if (not contains(iP1)){cerr << "Point 1: " << iP1 << " not in circunference with center: " << _c << " and radius: " << _r << endl;}
+			if (not contains(iP2)){cerr << "Point 2: " << iP2 << " not in circunference with center: " << _c << " and radius: " << _r << endl;}
 			double aAng1 = atan2(iP1.y - _c.y, iP1.x - _c.x);
 			double aAng2 = atan2(iP2.y - _c.y, iP2.x - _c.x);
 			if (aAng1 < 0) aAng1 += 2 * M_PI;
@@ -323,7 +323,7 @@ namespace racing {
 using namespace racing;
 using namespace trigonometry;
 
-int main()
+int main_()
 {
 	Car aMainCar;
 	Car aBossCar;
