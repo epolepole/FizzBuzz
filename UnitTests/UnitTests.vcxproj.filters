@@ -26,11 +26,9 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="unittest1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\FizzBuzz\StringChecks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestStringChecks.cpp" />
   </ItemGroup>
 </Project>
