@@ -18,16 +18,19 @@ def gen_rotated_matrix(n):
     return m90
 
 
+def get_new_coordinates(i, j, z):
+    return j, z - i
+
+
 def rotate_90(m, size):
     z = size - 1
-    for l in range(size // 2):
-        for j in range(l, z - l):
-            a1, b1 = l, j
-            a2, b2 = b1, z - l
-            a3, b3 = b2, z - j
-            a4, b4 = b3, a1
+    for i in range(size // 2):
+        for j in range(i, z - i):
+            a1, b1 = i, j
+            a2, b2 = get_new_coordinates(a1, b1, z)
+            a3, b3 = get_new_coordinates(a2, b2, z)
+            a4, b4 = get_new_coordinates(a3, b3, z)
             m[a1][b1], m[a2][b2], m[a3][b3], m[a4][b4] = m[a4][b4], m[a1][b1], m[a2][b2], m[a3][b3]
-
     return m
 
 
