@@ -52,18 +52,11 @@ class TreeHelper:
 
 
 def test_tree_helper():
-    print("")
     random_list = list([randint(0, 200) for _ in range(50)])
-    print("Random list: [ ", end=" ")
-    for i in random_list:
-        print(i, end=" ")
-    print("]")
     root = TreeHelper.create_tree_from_list(random_list)
     ordered_list = TreeHelper.get_ordered_list(root)
-    print("Ordered list: [ ", end=" ")
-    for i in ordered_list:
-        print(i, end=" ")
-    print("]")
+    sorted_random_list = sorted(set(random_list))
+    assert ordered_list == sorted_random_list
 
 
 if __name__ == "__main__":
