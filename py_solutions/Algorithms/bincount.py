@@ -1,12 +1,12 @@
 import time
 
 
-
 def count_count_1_bits(num: int):
     return bin(num).count('1')
 
 
 def sum_count_1_bits(num: int):
+    pass
 
 
 def count_1_bits(num: int):
@@ -28,7 +28,7 @@ def test_bin_count(repetitions, method, param):
     for i in range(repetitions):
         method(param)
     end = time.time()
-    print("Rep: " + str(repetitions) + ", total time: " + str((start-end)) + ", time per rep: " + str((start-end)/repetitions))
+    print("Rep: " + str(repetitions) + ", total time: " + str((start - end)) + ", time per rep: " + str((start - end) / repetitions))
 
 
 test_bin_count(100000, count_1_bits, 10984005)

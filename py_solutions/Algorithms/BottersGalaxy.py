@@ -1,5 +1,4 @@
 import sys
-import math
 
 # Made with love by AntiSquid, Illedan and Wildum.
 # You can help children learn to code while you participate by donating to CoderDojo.
@@ -12,7 +11,7 @@ k_valkyrie = "VALKIRIE"
 k_wait = "WAIT"
 
 
-def debug(info:str):
+def debug(info: str):
     print(info, file=sys.stderr)
 
 
@@ -39,10 +38,9 @@ class Entity:
         self.count_down_3 = int(count_down_3)
         self.mana = int(mana)
         self.max_mana = int(max_mana)
-        self.mana_regeneration = int(mana_regeneration
+        self.mana_regeneration = int(mana_regeneration)
         self.is_visible = int(is_visible)
         self.items_owned = int(items_owned)
-        self.
 
     def read_input(self):
         unit_id, team, unit_type, x, y, attack_range, health, max_health, shield, attack_damage, movement_speed, stun_duration, gold_value, count_down_1, count_down_2, count_down_3, mana, max_mana, mana_regeneration, hero_type, is_visible, items_owned = input().split()
@@ -69,7 +67,8 @@ class Entity:
 
 
 my_team = int(input())
-bush_and_spawn_point_count = int(input())  # usefrul from wood1, represents the number of bushes and the number of places where neutral units can spawn
+bush_and_spawn_point_count = int(
+    input())  # usefrul from wood1, represents the number of bushes and the number of places where neutral units can spawn
 for i in range(bush_and_spawn_point_count):
     # entity_type: BUSH, from wood1 it can also be SPAWN
     entity_type, x, y, radius = input().split()
@@ -132,7 +131,6 @@ while True:
 
     # Write an action using print
     # To debug: print("Debug messages...", file=sys.stderr)
-
 
     # If roundType has a negative value then you need to output a Hero name, such as "DEADPOOL" or "VALKYRIE".
     # Else you need to output roundType number of any valid action, such as "WAIT" or "ATTACK unitId"
