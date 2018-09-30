@@ -9,7 +9,7 @@ def stock_buy_naive(p):
 
 def stock_buy(prices):
     mx = 0
-    mn = float('inf')
+    mn = prices[0]
     for price in prices:
         mn = min(mn, price)
         mx = max(mx, price - mn)
