@@ -17,8 +17,8 @@ def rob_rec(a, memo):
 
 # Iterative solution
 def rob_it(a):
-    mx = [a[0]]
-    for i in range(1, len(a)):
+    mx = [a[0], max(a[0], a[1])]
+    for i in range(2, len(a)):
         max_val = max(mx[i - 1], a[i] + mx[i - 2])
         mx.append(max_val)
     return mx[len(a) - 1]
