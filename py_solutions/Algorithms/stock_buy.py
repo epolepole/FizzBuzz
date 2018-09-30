@@ -21,3 +21,4 @@ def test():
     assert stock_buy_naive([6, 4, 7, 1, 6, 5]) == 5
     assert stock_buy([7, 1, 5, 3, 6, 4]) == 5
     assert stock_buy([6, 4, 7, 1, 6, 5]) == 5
+    assert stock_buy([4, 3, 2]) == 0
